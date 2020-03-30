@@ -13,14 +13,17 @@ class OptParser:
         parsed = {}
         for sysArg in sysArgs:
             if sysArg.startswith("--"):
+                # parse long name with value after '='
                 if sysArg.find("=") >= 0:
                     name, value = sysArg[2:].split("=")
                     argType, _ = self._args[name]
                     value = self.parseValue(value, argType) 
                     parsed[name] = value
+                # parse long name without value
                 else:
                     parsed[sysArg[2:]] = ""
             elif sysArg.startswith("-"):
+                # parse short name with value after '='
                 if sysArg.find("=") >= 0:
                     abbrev, value = sysArg[1:].split("=")
                     name = self._abbrevToFullName[abbrev]
@@ -31,8 +34,10 @@ class OptParser:
                     first = sysArg[1]
                     firstName = self._abbrevToFullName[first]
                     argType, _ = self._args[firstName]
+                    # parse short name with value without '='
                     if argType is not None:
                         parsed[firstName] = argType(sysArg[2:])
+                    # parse short names without values
                     else:
                         for c in sysArg[1:]:
                             name = self._abbrevToFullName[c]
