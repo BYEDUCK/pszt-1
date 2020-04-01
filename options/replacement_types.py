@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class ReplacementType:
     GENERATION = "generation"
     ELITISM = "elite"
