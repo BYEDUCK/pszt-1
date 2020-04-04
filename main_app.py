@@ -1,11 +1,16 @@
-from utils.opt_parser import *
 import sys
+
+from utils.opt_parser import *
 
 # TODO definicja osobnika
 
 if __name__ == "__main__":
-    parser = OptParser([OptConfig("sel_type", "s", str, "roulette"), OptConfig("rep_type", "r", str, "tournament"),
-                        OptConfig("iterations", "i", int, 100)])
+    opt_config = [
+        OptConfig("sel_type", "s", str, "roulette"),
+        OptConfig("rep_type", "r", str, "tournament"),
+        OptConfig("iterations", "i", int, 100)
+    ]
+    parser = OptParser(opt_config)
     parsedOptions = parser.parse(sys.argv[1:])
 
     print(parsedOptions)
