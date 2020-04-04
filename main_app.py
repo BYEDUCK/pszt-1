@@ -1,6 +1,4 @@
 from utils.opt_parser import *
-from cec17_python.cec17_functions import cec17_test_func
-# niestety wywala mi błąd bo nie potrafi zaimportować biblioteki so
 import sys
 
 # TODO definicja osobnika
@@ -11,8 +9,6 @@ if __name__ == "__main__":
     parsedOptions = parser.parse(sys.argv[1:])
 
     print(parsedOptions)
-
-    cec17_test_func(2, 2, 2, 2, 2)
 
     # TODO parameters compatibility check
 
