@@ -6,14 +6,16 @@ import random
 import math
 import statistics
 import copy
-DEBUG = 0
+
+
+DEBUG = 1
 BEST = 1
 
 
 def min_value(x, y, function):
     # TODO wyznaczac poprawnie minimum funkcji z tych dwóch argumentów
     if function == 0:
-        return min(x, y)
+        return min(math.sin(x), math.sin(y))
     else:
         return -1
 
@@ -44,24 +46,11 @@ if __name__ == "__main__":
 
     print(parsedOptions)
 
-    # x: Solution vector
-    x = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    # nx: Number of dimensions
-    nx = 10
-    # mx: Number of objective functions
-    mx = 1
-    # func_num: Function number
-    func_num = 1
-    # Pointer for the calculated fitness
-    f = [0]
-
-    # cec17_test_func(x, f, nx, mx, func_num)
-
     # Check if we got needed parameters
     try:
         iterations
     except NameError:
-        iterations = 100
+        iterations = 50
 
     try:
         pair_nr
@@ -110,7 +99,7 @@ if __name__ == "__main__":
 
     subject = []
     for i in range(pair_nr * 2):
-        subject.append(i)
+        subject.append(i*10)
         # TODO losowanie
 
     # Random pairing of selected subjects
