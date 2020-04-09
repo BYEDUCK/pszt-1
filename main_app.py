@@ -133,22 +133,24 @@ if __name__ == "__main__":
         if DEBUG:
             print("reproducted", pom_pair, "\t", len(pom_pair))
 
-        # TODO krzyżowanie
-        random.shuffle(pom_pair)
-        i = 0
-        while i < len(pom_pair) - 1:
-            if random.random() < cross_prob:
-                pom = cross_values(pom_pair[i], pom_pair[i + 1], function)
-                del pom_pair[i:i + 2]
-                pom_pair.insert(i, pom)
-            i += 1
-        if DEBUG:
-            print("crossed", pom_pair, "\t", len(pom_pair))
+        # # Crossing
+        # crossing(pom_pair, "TO DO")
+        # if DEBUG:
+        #     print("crossed", pom_pair, "\t", len(pom_pair))
+        #
+        # # Mutation
+        # pom_pair = mutation(pom_pair, mut_prob, mut_range, function)
+        # if DEBUG:
+        #     print("mutated", pom_pair, "\t", len(pom_pair))
 
-        # Mutation
-        pom_pair = mutation(pom_pair, mut_prob, mut_range, function)
-        if DEBUG:
-            print("mutated", pom_pair, "\t", len(pom_pair))
+        new_pairs = []
+        # Cross or mutate (all have to do sth)
+        for j in range(len(pom_pair)):
+            if random.random() < mut_prob:
+                pom = mutate(pom_pair[j], mut_range)
+            else:
+                pom = crossover(pom_pair, pom_pair[j])
+            new_pairs.append([pom, min(value_of_function(pom[0], function), value_of_function(pom[1], function))])
 
         # Replacing worst subjects
         if DEBUG:

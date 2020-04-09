@@ -3,6 +3,25 @@ import random
 from evolution_algorithm.testing_functions import value_of_function
 
 
+# Mutation of ONLY one number
+def mutate(pair, sigma):
+    x = random.randint(0, 1)
+    if type(pair[0]) == int and type(pair[1]) == int:
+        pair[x] = random.gauss(pair[x], sigma)
+    elif type(pair[0]) == list and type(pair[1]) == list:
+        y = random.randint(0, len(pair) - 1)
+        pair[x][y] = random.gauss(pair[x][y], sigma)
+    # TODO Czy sopdziewamy się czegoś innego niż int lub list???
+    else:
+        return 0
+    return pair
+
+
+def crossover(base, pair):
+    return 0
+
+
+# UNUSED
 def mutation(base, probability, sigma, function):
     mutated = []
     for i in range(len(base)):
@@ -32,10 +51,22 @@ def replacing(base, insert):
     return pom_list[:len(base)]
 
 
+# UNUSED
 def crossing(base, costam):
+    crossed = []
+    random.shuffle(base)
+    i = 0
+    while i < len(pom_pair) - 1:
+        if random.random() < cross_prob:
+            pom = cross_values(pom_pair[i], pom_pair[i + 1], function)
+            del pom_pair[i:i + 2]
+            pom_pair.insert(i, pom)
+        i += 1
+
     return 0
 
 
+# UNUSED
 def _mutate_subject(subject, probability, sigma):
     # TODO ogarnąć obsługiwanie list
     if random.random() < probability:
@@ -44,6 +75,7 @@ def _mutate_subject(subject, probability, sigma):
     return subject
 
 
+# UNUSED
 def _mutate_list(list, probability, sigma):
     # TODO
     return list
