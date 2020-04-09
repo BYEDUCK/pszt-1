@@ -1,4 +1,5 @@
 from utils.opt_parser import *
+from evolution_algorithm.main_functions import *
 # import numpy
 # from cec17_python.cec17_functions import cec17_test_func
 import sys
@@ -6,7 +7,6 @@ import random
 import math
 import statistics
 import copy
-
 
 DEBUG = 1
 BEST = 1
@@ -99,7 +99,7 @@ if __name__ == "__main__":
 
     subject = []
     for i in range(pair_nr * 2):
-        subject.append(i*10)
+        subject.append(i * 10)
         # TODO losowanie
 
     # Random pairing of selected subjects
@@ -116,6 +116,7 @@ if __name__ == "__main__":
     pairs.sort(key=lambda pom: pom[2])
     if DEBUG:
         print("default", pairs)
+
     for i in range(iterations):
         if DEBUG:
             print("iteration", i)
@@ -144,28 +145,18 @@ if __name__ == "__main__":
         if DEBUG:
             print("crossed", pom_pair, "\t", len(pom_pair))
 
-        # TODO mutacja
-        for j in range(len(pom_pair)):
-            for k in range(2):
-                if random.random() < mut_prob:
-                    # print(j, "\t", k, "\t", len(pom_pair), "\t", len(pom_pair[j]), "\t", pom_pair[j], "\t",
-                    #       pom_pair[j][k])
-                    pom_pair[j][k] = pom_pair[j][k] + random.uniform(-mut_range, mut_range)
-                    pom_pair[j][2] = min_value(pom_pair[j][0], pom_pair[j][1], function)
+        # Mutation
+        pom_pair = mutation(pom_pair, mut_prob, mut_range, function)
         if DEBUG:
             print("mutated", pom_pair, "\t", len(pom_pair))
 
-        # TODO wybierać najlepsze sztuki, czy zastępować te złe?
         # Replacing worst subjects
         if DEBUG:
             print("not substituted", pairs, "\t", len(pairs))
-        pairs = pairs[:pair_nr - len(pom_pair)] + pom_pair
+        pairs = replacing(pairs, pom_pair)
         if DEBUG:
             print("substituted", pairs, "\t", len(pairs))
 
-        pairs.sort(key=lambda pom: pom[2])
-        if DEBUG:
-            print("sorted", pairs, "\t", len(pairs))
         if BEST:
             print("best", pairs[0][2])
 
