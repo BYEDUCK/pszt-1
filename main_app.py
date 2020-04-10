@@ -5,39 +5,10 @@ from evolution_algorithm.main_functions import *
 import sys
 import random
 import math
-import statistics
 import copy
 
-DEBUG = 1
+DEBUG = 0
 BEST = 1
-
-
-def min_value(x, y, function):
-    # TODO wyznaczac poprawnie minimum funkcji z tych dwóch argumentów
-    if function == 0:
-        return min(math.sin(x), math.sin(y))
-    else:
-        return -1
-
-
-def cross_values(x, y, function):
-    if type(x[0]) == int and type(y[0]) == int:
-        pom0 = statistics.mean([x[0], y[0]])
-        pom1 = statistics.mean([x[1], y[1]])
-        out = [pom0, pom1, min_value(pom0, pom1, function)]
-    # TODO sprawdzić czy to działa jak powinno
-    elif type(x[0]) == list and type(y[0]) == list:
-        pom_list_x = []
-        pom_list_y = []
-        for i in range(len(x[0])):
-            pom_list_x.append(statistics.mean([x[i][0], y[i][0]]))
-            pom_list_y.append(statistics.mean([x[i][1], y[i][1]]))
-        out = [pom_list_x, pom_list_y, min_value(pom_list_x, pom_list_y, function)]
-    else:
-        out = [0, 0, 0]
-
-    return out
-
 
 if __name__ == "__main__":
     parser = OptParser([OptConfig("sel_type", "s", str, "roulette"), OptConfig("rep_type", "r", str, "tournament"),
@@ -108,9 +79,9 @@ if __name__ == "__main__":
     for i in range(pair_nr):
         pom0 = subject[2 * i]
         pom1 = subject[2 * i + 1]
-        pairs.append([pom0, pom1, min_value(pom0, pom1, function)])
+        pairs.append([pom0, pom1, min(value_of_function(pom0, function), value_of_function(pom1, function))])
 
-    # TODO zrobic iles razy ten sam algorytm i wyciagnac srednia
+    # TODO zrobic iles razy ten sam algorytm i wyciagnac srednia, albo jeszcze jakieś wariancje itd (może być lepiej)
 
     # TODO start evolution (iteration loop)
     pairs.sort(key=lambda pom: pom[2])
@@ -133,29 +104,22 @@ if __name__ == "__main__":
         if DEBUG:
             print("reproducted", pom_pair, "\t", len(pom_pair))
 
-        # # Crossing
-        # crossing(pom_pair, "TO DO")
-        # if DEBUG:
-        #     print("crossed", pom_pair, "\t", len(pom_pair))
-        #
-        # # Mutation
-        # pom_pair = mutation(pom_pair, mut_prob, mut_range, function)
-        # if DEBUG:
-        #     print("mutated", pom_pair, "\t", len(pom_pair))
-
         new_pairs = []
         # Cross or mutate (all have to do sth)
         for j in range(len(pom_pair)):
+            pom = []
             if random.random() < mut_prob:
                 pom = mutate(pom_pair[j], mut_range)
             else:
                 pom = crossover(pom_pair, pom_pair[j])
-            new_pairs.append([pom, min(value_of_function(pom[0], function), value_of_function(pom[1], function))])
+            pom[2] = min(value_of_function(pom[0], function), value_of_function(pom[1], function))
+            new_pairs.append(pom)
 
         # Replacing worst subjects
         if DEBUG:
+            print("Cross or mutation", new_pairs, "\t", len(pairs))
             print("not substituted", pairs, "\t", len(pairs))
-        pairs = replacing(pairs, pom_pair)
+        pairs = replacing(pairs, new_pairs)
         if DEBUG:
             print("substituted", pairs, "\t", len(pairs))
 
