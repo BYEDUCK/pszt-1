@@ -7,7 +7,7 @@ import random
 import math
 import copy
 
-DEBUG = 0
+DEBUG = 1
 BEST = 1
 
 if __name__ == "__main__":
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     try:
         function
     except NameError:
-        function = 0
+        function = 1
 
     # TODO parameters compatibility check
     if repr_size >= 1:
@@ -70,7 +70,10 @@ if __name__ == "__main__":
 
     subject = []
     for i in range(pair_nr * 2):
-        subject.append(i * 10)
+        element = []
+        for j in range(4):
+            element.append(j * i * 4.72)
+        subject.append(element)
         # TODO losowanie
 
     # Random pairing of selected subjects

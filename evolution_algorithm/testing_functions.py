@@ -6,6 +6,8 @@ def value_of_function(x, function):
         value = x
     elif function == 1:
         value = 0
+        for i in range(len(x)):
+            value += x[i] * i
     else:
         value = 0
 
