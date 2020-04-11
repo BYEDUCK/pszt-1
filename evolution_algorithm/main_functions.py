@@ -3,10 +3,10 @@ import random
 from evolution_algorithm.testing_functions import value_of_function
 
 
+# TODO dorobić aby działało też dla zwykłego ewolucyjnego
 # Mutation of ONLY one number
 def mutate(pair, sigma):
     x = random.randint(0, 1)
-    # TODO float
     if (type(pair[0]) == int or type(pair[0]) == float) and (type(pair[1]) == int or type(pair[1]) == float):
         pair[x] = random.gauss(pair[x], sigma)
     elif type(pair[0]) == list and type(pair[1]) == list:
@@ -36,31 +36,6 @@ def crossover(base, pair):
     else:
         sys.exit('Crossover - unknown pair element')
     return pair
-
-
-# UNUSED
-def mutation(base, probability, sigma, function):
-    mutated = []
-    for i in range(len(base)):
-        marriage = base[i]
-        mutated_marriage = []
-        if type(marriage[0]) == int and type(marriage[1]) == int:
-            # mutated_marriage[0] = _mutate_subject(marriage[0], probability, sigma)
-            # mutated_marriage[1] = _mutate_subject(marriage[1], probability, sigma)
-            return 0
-        elif type(marriage[0]) == list and type(marriage[1]) == list:
-            # mutated_marriage[0] = _mutate_list(marriage[0], probability, sigma)
-            # mutated_marriage[1] = _mutate_list(marriage[1], probability, sigma)
-            return 0
-        # TO DO Czy sopdziewamy się czegoś innego niż int lub list???
-        else:
-            return 0
-
-        mutated_marriage[2] = min(value_of_function(mutated_marriage[0], function),
-                                  value_of_function(mutated_marriage[1], function))
-        mutated.append(mutated_marriage)
-        # TO DO sprawdzić czy to działa poprawnie
-    return mutated
 
 
 def replacing(base, insert):

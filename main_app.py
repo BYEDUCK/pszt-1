@@ -7,7 +7,7 @@ import random
 import math
 import copy
 
-DEBUG = 1
+DEBUG = 0
 BEST = 1
 
 if __name__ == "__main__":
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     try:
         iterations
     except NameError:
-        iterations = 50
+        iterations = 20
 
     try:
         pair_nr
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     try:
         mut_prob
     except NameError:
-        mut_prob = 0.2
+        mut_prob = 0.5
 
     try:
         mut_range
@@ -56,15 +56,16 @@ if __name__ == "__main__":
     try:
         function
     except NameError:
-        function = 1
+        function = 2
 
     # TODO parameters compatibility check
-    if repr_size >= 1:
-        repr_nr = pair_nr - 1
-    elif repr_size <= 0:
-        repr_nr = 1
-    else:
-        repr_nr = math.floor(pair_nr * repr_size)
+    # if repr_size >= 1:
+    #     repr_nr = pair_nr - 1
+    # elif repr_size <= 0:
+    #     repr_nr = 1
+    # else:
+    #     repr_nr = math.floor(pair_nr * repr_size)
+    repr_nr = math.floor(pair_nr * repr_size)
 
     # TODO test all tested functions
 
@@ -73,7 +74,8 @@ if __name__ == "__main__":
         element = []
         for j in range(4):
             element.append(j * i * 4.72)
-        subject.append(element)
+        # subject.append(element)
+        subject.append(i * 3.14)
         # TODO losowanie
 
     # Random pairing of selected subjects
@@ -86,11 +88,11 @@ if __name__ == "__main__":
 
     # TODO zrobic iles razy ten sam algorytm i wyciagnac srednia, albo jeszcze jakieś wariancje itd (może być lepiej)
 
-    # TODO start evolution (iteration loop)
     pairs.sort(key=lambda pom: pom[2])
     if DEBUG:
         print("default", pairs)
 
+    # Iteration loop of evolution algorithm
     for i in range(iterations):
         if DEBUG:
             print("iteration", i)
@@ -120,19 +122,17 @@ if __name__ == "__main__":
 
         # Replacing worst subjects
         if DEBUG:
-            print("Cross or mutation", new_pairs, "\t", len(pairs))
+            print("Cross or mutation", new_pairs, "\t", len(new_pairs))
             print("not substituted", pairs, "\t", len(pairs))
         pairs = replacing(pairs, new_pairs)
         if DEBUG:
             print("substituted", pairs, "\t", len(pairs))
 
         if BEST:
-            print("best", pairs[0][2])
+            print("best", pairs[0])
 
     if BEST:
         print([row[2] for row in pairs])
-
-    # TODO koniec pętli
 
     # TODO to samo, ale z podstawowym algorytmem
 
