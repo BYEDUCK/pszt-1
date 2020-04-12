@@ -1,5 +1,6 @@
 from utils.opt_parser import *
 from evolution_algorithm.main_functions import *
+from evolution_algorithm.testing_functions import *
 # import numpy
 # from cec17_python.cec17_functions import cec17_test_func
 import sys
@@ -68,7 +69,7 @@ if __name__ == "__main__":
     repr_nr = math.floor(pair_nr * repr_size)
 
     # TODO test all tested functions
-
+    # TODO zrobic iles razy ten sam algorytm i wyciagnac srednia, albo jeszcze jakieś wariancje itd (może być lepiej)
     subject = []
     for i in range(pair_nr * 2):
         element = []
@@ -86,12 +87,11 @@ if __name__ == "__main__":
         pom1 = subject[2 * i + 1]
         pairs.append([pom0, pom1, min(value_of_function(pom0, function), value_of_function(pom1, function))])
 
-    # TODO zrobic iles razy ten sam algorytm i wyciagnac srednia, albo jeszcze jakieś wariancje itd (może być lepiej)
-
     pairs.sort(key=lambda pom: pom[2])
     if DEBUG:
         print("default", pairs)
 
+    # TODO przerobić na jedną pętlę, która będzię się dwa razy kręcić, ale różnie w zależności od podanych parametrów
     # Iteration loop of evolution algorithm
     for i in range(iterations):
         if DEBUG:
@@ -135,5 +135,54 @@ if __name__ == "__main__":
         print([row[2] for row in pairs])
 
     # TODO to samo, ale z podstawowym algorytmem
+
+    random.shuffle(subject)
+    print(subject)
+    test_elements = []
+    for i in range(len(subject)):
+        test_elements.append([subject[i], value_of_function(subject[i], function)])
+
+    for i in range(iterations):
+        if DEBUG:
+            print("Standard iteration", i)
+
+        pom_element = []
+        if DEBUG:
+            print("start", pom_element)
+
+        for j in range(repr_nr):
+            pom = math.floor(abs(random.gauss(0, repr_dispersion)))
+            while pom >= pair_nr * 2:
+                pom = math.floor(abs(random.gauss(0, repr_dispersion)))
+            pom_element.append(copy.deepcopy(test_elements[pom]))
+        if DEBUG:
+            print("reproducted", pom_element, "\t", len(pom_element))
+
+        new_elements = []
+        # Cross or mutate (all have to do sth)
+        for j in range(len(pom_element)):
+            pom = []
+            if random.random() < mut_prob:
+                pom = mutate(pom_element[j], mut_range)
+            else:
+                pom = crossover(pom_element, pom_element[j])
+                # TODO przekrztałcić na uniwersalną ilość zmiennych
+            pom[1] = value_of_function(pom[0], function)
+            new_elements.append(pom)
+
+        # Replacing worst subjects
+        if DEBUG:
+            print("Cross or mutation", new_elements, "\t", len(new_elements))
+            print("not substituted", test_elements, "\t", len(test_elements))
+        test_elements = replacing(test_elements, new_elements)
+        if DEBUG:
+            print("substituted", test_elements, "\t", len(test_elements))
+
+        if BEST:
+            print("best", test_elements[0])
+
+    if BEST:
+        print([row[1] for row in test_elements])
+
 
     # TODO eksport i porównanie wyników
