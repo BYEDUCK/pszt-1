@@ -1,8 +1,8 @@
 from utils.opt_parser import *
 from evolution_algorithm.main_functions import *
 from evolution_algorithm.testing_functions import *
+from evolution_algorithm.stats import *
 # import numpy
-# from cec17_python.cec17_functions import cec17_test_func
 import sys
 import random
 import math
@@ -38,11 +38,6 @@ if __name__ == "__main__":
         mut_range
     except NameError:
         mut_range = 1
-
-    try:
-        cross_prob
-    except NameError:
-        cross_prob = 0.5
 
     try:
         repr_size
@@ -91,6 +86,7 @@ if __name__ == "__main__":
     if DEBUG:
         print("default", pairs)
 
+    best_test = []
     # TODO przerobić na jedną pętlę, która będzię się dwa razy kręcić, ale różnie w zależności od podanych parametrów
     # Iteration loop of evolution algorithm
     for i in range(iterations):
@@ -130,12 +126,14 @@ if __name__ == "__main__":
 
         if BEST:
             print("best", pairs[0])
+        best_test.append(pairs[0][2])
 
     if BEST:
         print([row[2] for row in pairs])
 
     # TODO to samo, ale z podstawowym algorytmem
 
+    best_standard = []
     random.shuffle(subject)
     print(subject)
     test_elements = []
@@ -181,8 +179,10 @@ if __name__ == "__main__":
         if BEST:
             print("best", test_elements[0])
 
+        best_standard.append(test_elements[0][1])
+
     if BEST:
         print([row[1] for row in test_elements])
 
-
-    # TODO eksport i porównanie wyników
+    # Compare results
+    make_statistics(pairs, test_elements, best_test, best_standard, function)
