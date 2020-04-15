@@ -1,6 +1,3 @@
-import sys
-
-
 def value_of_function(x, function):
     if function == 0:
         value = x

@@ -30,10 +30,9 @@ def _compare_every_step(test_step, standard_step, function):
     plt.xlabel("Iteration")
     plt.ylabel("Best subject")
     plt.legend(["Tested", "Standard"])
-    plt.inferno()
     plt.show()
 
-    # TODO odległość od najlepszego rozwiązania
+    # TODO odległość od najlepszego rozwiązania - troche glupie bo jest to blizniacze do  najlepszego dopasowania w kadej iteraji
     test_delta = []
     for i in range(len(test_step)):
         test_delta.append(abs(test_step[i] - test_step[len(test_step) - 1]))
@@ -47,10 +46,9 @@ def _compare_every_step(test_step, standard_step, function):
     plt.xlabel("Iteration")
     plt.ylabel("Distance")
     plt.legend(["Tested", "Standard"])
-    plt.autumn()
     plt.show()
 
-    # TODO rozrzut elementów w danym kroku
+    # TODO rozrzut elementów w danym kroku - w cholere pamieci bedzie zrec!!!
     test_mean = []
     test_median = []
     test_variance = []

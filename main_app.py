@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     print(parsedOptions)
 
-    # Check if we got needed parameters
+    # TODO Check if we got needed parameters
     try:
         iterations
     except NameError:
@@ -82,107 +82,18 @@ if __name__ == "__main__":
         pom1 = subject[2 * i + 1]
         pairs.append([pom0, pom1, min(value_of_function(pom0, function), value_of_function(pom1, function))])
 
-    pairs.sort(key=lambda pom: pom[2])
-    if DEBUG:
-        print("default", pairs)
-
-    best_test = []
-    # TODO przerobić na jedną pętlę, która będzię się dwa razy kręcić, ale różnie w zależności od podanych parametrów
-    # Iteration loop of evolution algorithm
-    for i in range(iterations):
-        if DEBUG:
-            print("iteration", i)
-
-        pom_pair = []
-        if DEBUG:
-            print("start", pom_pair)
-        # TODO reprodukcja
-        for j in range(repr_nr):
-            pom = math.floor(abs(random.gauss(0, repr_dispersion)))
-            while pom >= pair_nr:
-                pom = math.floor(abs(random.gauss(0, repr_dispersion)))
-            pom_pair.append(copy.deepcopy(pairs[pom]))
-        if DEBUG:
-            print("reproducted", pom_pair, "\t", len(pom_pair))
-
-        new_pairs = []
-        # Cross or mutate (all have to do sth)
-        for j in range(len(pom_pair)):
-            pom = []
-            if random.random() < mut_prob:
-                pom = mutate(pom_pair[j], mut_range)
-            else:
-                pom = crossover(pom_pair, pom_pair[j])
-            pom[2] = min(value_of_function(pom[0], function), value_of_function(pom[1], function))
-            new_pairs.append(pom)
-
-        # Replacing worst subjects
-        if DEBUG:
-            print("Cross or mutation", new_pairs, "\t", len(new_pairs))
-            print("not substituted", pairs, "\t", len(pairs))
-        pairs = replacing(pairs, new_pairs)
-        if DEBUG:
-            print("substituted", pairs, "\t", len(pairs))
-
-        if BEST:
-            print("best", pairs[0])
-        best_test.append(pairs[0][2])
-
-    if BEST:
-        print([row[2] for row in pairs])
+    pairs, best_test = testing_loop(iterations, pairs, mut_prob, mut_range, repr_nr, repr_dispersion, function, DEBUG,
+                                    BEST)
 
     # TODO to samo, ale z podstawowym algorytmem
 
-    best_standard = []
     random.shuffle(subject)
-    print(subject)
     test_elements = []
     for i in range(len(subject)):
         test_elements.append([subject[i], value_of_function(subject[i], function)])
 
-    for i in range(iterations):
-        if DEBUG:
-            print("Standard iteration", i)
-
-        pom_element = []
-        if DEBUG:
-            print("start", pom_element)
-
-        for j in range(repr_nr):
-            pom = math.floor(abs(random.gauss(0, repr_dispersion)))
-            while pom >= pair_nr * 2:
-                pom = math.floor(abs(random.gauss(0, repr_dispersion)))
-            pom_element.append(copy.deepcopy(test_elements[pom]))
-        if DEBUG:
-            print("reproducted", pom_element, "\t", len(pom_element))
-
-        new_elements = []
-        # Cross or mutate (all have to do sth)
-        for j in range(len(pom_element)):
-            pom = []
-            if random.random() < mut_prob:
-                pom = mutate(pom_element[j], mut_range)
-            else:
-                pom = crossover(pom_element, pom_element[j])
-                # TODO przekrztałcić na uniwersalną ilość zmiennych
-            pom[1] = value_of_function(pom[0], function)
-            new_elements.append(pom)
-
-        # Replacing worst subjects
-        if DEBUG:
-            print("Cross or mutation", new_elements, "\t", len(new_elements))
-            print("not substituted", test_elements, "\t", len(test_elements))
-        test_elements = replacing(test_elements, new_elements)
-        if DEBUG:
-            print("substituted", test_elements, "\t", len(test_elements))
-
-        if BEST:
-            print("best", test_elements[0])
-
-        best_standard.append(test_elements[0][1])
-
-    if BEST:
-        print([row[1] for row in test_elements])
+    test_elements, best_standard = testing_loop(iterations, test_elements, mut_prob, mut_range, repr_nr,
+                                                repr_dispersion, function, DEBUG, BEST)
 
     # Compare results
     make_statistics(pairs, test_elements, best_test, best_standard, function)

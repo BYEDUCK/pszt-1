@@ -1,5 +1,8 @@
+from evolution_algorithm.testing_functions import *
 import sys
 import random
+import math
+import copy
 
 
 # Mutation of ONLY one number
@@ -39,3 +42,54 @@ def replacing(base, insert):
     pom_list.sort(key=lambda pom: pom[len(base[0]) - 1])
     # return only best numbers
     return pom_list[:len(base)]
+
+
+def testing_loop(iterations, population, mut_prob, mut_range, repr_nr, repr_dispersion, function, DEBUG, BEST):
+    population.sort(key=lambda pom: pom[len(pom) - 1])
+    if DEBUG:
+        print("default", population)
+
+    best_test = []
+    for i in range(iterations):
+        if DEBUG:
+            print("iteration", i)
+
+        pom_pair = []
+        if DEBUG:
+            print("start", pom_pair)
+        # TODO reprodukcja
+        for j in range(repr_nr):
+            pom = math.floor(abs(random.gauss(0, repr_dispersion)))
+            while pom >= len(population):
+                pom = math.floor(abs(random.gauss(0, repr_dispersion)))
+            pom_pair.append(copy.deepcopy(population[pom]))
+        if DEBUG:
+            print("reproducted", pom_pair, "\t", len(pom_pair))
+
+        new_pairs = []
+        # Cross or mutate (all have to do sth)
+        for j in range(len(pom_pair)):
+            pom = []
+            if random.random() < mut_prob:
+                pom = mutate(pom_pair[j], mut_range)
+            else:
+                pom = crossover(pom_pair, pom_pair[j])
+            pom[len(pom) - 1] = min(value_of_function(pom[0], function), value_of_function(pom[1], function))
+            new_pairs.append(pom)
+
+        # Replacing worst subjects
+        if DEBUG:
+            print("Cross or mutation", new_pairs, "\t", len(new_pairs))
+            print("not substituted", population, "\t", len(population))
+        population = replacing(population, new_pairs)
+        if DEBUG:
+            print("substituted", population, "\t", len(population))
+
+        if BEST:
+            print("best", population[0])
+        best_test.append(population[0][len(population[0]) - 1])
+
+    if BEST:
+        print([row[len(row) - 1] for row in population])
+
+    return population, best_test
