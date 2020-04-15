@@ -21,13 +21,47 @@ def _compare_best(test, standard, function):
 
 
 def _compare_every_step(test_step, standard_step, function):
-    # print(test_step)
-    # print(standard_step)
+    print(test_step)
+    print(standard_step)
+
     plt.plot(test_step)
     plt.plot(standard_step)
+    plt.title("Najlepsze dopasowanie funkcji w każdej iteracji")
     plt.xlabel("Iteration")
     plt.ylabel("Best subject")
+    plt.legend(["Tested", "Standard"])
+    plt.inferno()
     plt.show()
+
     # TODO odległość od najlepszego rozwiązania
+    test_delta = []
+    for i in range(len(test_step)):
+        test_delta.append(abs(test_step[i] - test_step[len(test_step) - 1]))
+    standard_delta = []
+    for i in range(len(standard_step)):
+        standard_delta.append(abs(standard_step[i] - standard_step[len(standard_step) - 1]))
+
+    plt.plot(test_delta)
+    plt.plot(standard_delta)
+    plt.title("Odległość od najlepszego znalezionego rozwiązania")
+    plt.xlabel("Iteration")
+    plt.ylabel("Distance")
+    plt.legend(["Tested", "Standard"])
+    plt.autumn()
+    plt.show()
+
     # TODO rozrzut elementów w danym kroku
+    test_mean = []
+    test_median = []
+    test_variance = []
+    test_pstdev = []
+    for i in range(len(test_step)):
+        test_delta.append(abs(test_step[i] - test_step[len(test_step) - 1]))
+    standard_mean = []
+    standard_median = []
+    standard_variance = []
+    standard_pstdev = []
+    for i in range(len(standard_step)):
+        standard_delta.append(abs(standard_step[i] - standard_step[len(standard_step) - 1]))
+
     return 0
