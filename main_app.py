@@ -15,11 +15,11 @@ def get_random_population():
 
 
 def mutate(_population):
-    pass
+    raise NotImplementedError()
 
 
 def crossover(_population):
-    pass
+    raise NotImplementedError()
 
 
 def get_selection(_selection_type):
@@ -60,7 +60,7 @@ def get_function(_function_type):
 
 
 def compute_statistics(_population):
-    pass
+    raise NotImplementedError()
 
 
 if __name__ == "__main__":
@@ -79,7 +79,7 @@ if __name__ == "__main__":
     replace = get_replacement(replacement_type)
     population = get_random_population()
 
-    for i in iterations:
+    for i in range(iterations):
         population = select(population)
         decision = rng.randrange(0, 100)
         if decision < crossover_probability:

@@ -1,10 +1,10 @@
 def roulette(population):
-    pass
+    raise NotImplementedError("This type of selection not implemented yet!")
 
 
 def tournament(population):
-    pass
+    raise NotImplementedError("This type of selection not implemented yet!")
 
 
 def threshold(population):
-    pass
+    raise NotImplementedError("This type of selection not implemented yet!")

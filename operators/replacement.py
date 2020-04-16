@@ -1,10 +1,10 @@
 def generation(population):
-    pass
+    raise NotImplementedError("This type of replacement not implemented yet!")
 
 
 def elite(population):
-    pass
+    raise NotImplementedError("This type of replacement not implemented yet!")
 
 
 def steady_state(population):
-    pass
+    raise NotImplementedError("This type of replacement not implemented yet!")
