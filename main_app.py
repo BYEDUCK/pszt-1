@@ -54,6 +54,11 @@ if __name__ == "__main__":
     except NameError:
         function = 2
 
+    try:
+        dimension
+    except NameError:
+        dimension = 1
+
     # TODO parameters compatibility check
     # if repr_size >= 1:
     #     repr_nr = pair_nr - 1
@@ -63,16 +68,15 @@ if __name__ == "__main__":
     #     repr_nr = math.floor(pair_nr * repr_size)
     repr_nr = math.floor(pair_nr * repr_size)
 
-    # TODO test all tested functions
     # TODO zrobic iles razy ten sam algorytm i wyciagnac srednia, albo jeszcze jakieś wariancje itd (może być lepiej)
+
+    # Drawing starting points
     subject = []
     for i in range(pair_nr * 2):
         element = []
-        for j in range(4):
-            element.append(j * i * 4.72)
-        # subject.append(element)
-        subject.append(i * 3.14)
-        # TODO losowanie
+        for j in range(dimension):
+            element.append(random.uniform(-100, 100))
+        subject.append(element)
 
     # Random pairing of selected subjects
     pairs = []
