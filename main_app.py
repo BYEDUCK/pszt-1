@@ -8,6 +8,7 @@ from options.replacement_types import ReplacementType
 from options.selection_type import SelectionType
 from utils.functions import *
 from utils.opt_parser import *
+
 from evolution_algorithm.main_functions import *
 from evolution_algorithm.testing_functions import *
 from evolution_algorithm.stats import *
@@ -17,11 +18,15 @@ import random
 import math
 import copy
 
-DEBUG = 0
-BEST = 1
 
-def get_random_population():
-    return []
+def get_random_population(number, dimension):
+    subject = []
+    for i in range(number * 2):
+        element = []
+        for j in range(dimension):
+            element.append(random.uniform(-100, 100))
+        subject.append(element)
+    return subject
 
 
 def mutate(_population):
@@ -80,33 +85,43 @@ if __name__ == "__main__":
     function_type = FunctionType(parsedOptions["function"])
     selection_type = SelectionType(parsedOptions["sel_type"])
     replacement_type = ReplacementType(parsedOptions["rep_type"])
-    crossover_probability = parsedOptions["crossover_p"] * 100
+    crossover_probability = parsedOptions["crossover_p"]
     dimensions = parsedOptions["dimensions"]
     iterations = parsedOptions["iterations"]
 
     fun = get_function(function_type)
     select = get_selection(selection_type)
     replace = get_replacement(replacement_type)
-    population = get_random_population()
 
+    # Meke population and pair population with same same start points
+    pair_nr = 100
+    func = fun  # TODO chwilowo
+    population = get_random_population(pair_nr * 2, dimensions)
+    # TODO władować do funkcji
+    pairs = []
+    for i in range(pair_nr):
+        pom0 = population[2 * i]
+        pom1 = population[2 * i + 1]
+        pairs.append([pom0, pom1, min(value_of_function(pom0, func), value_of_function(pom1, func))])
+    test_elements = []
+    for i in range(len(population)):
+        test_elements.append([population[i], value_of_function(population[i], func)])
+
+    # TODO Pętla główna też do funkcji
     for i in range(iterations):
         population = select(population)
-        decision = rng.randrange(0, 100)
-        if decision < crossover_probability:
+        if rng.random() < crossover_probability:
             crossover(population)
         mutate(population)
         population = replace(population)
         compute_statistics(population)
 
-# TODO to samo, ale z parami
+    # pairs, best_test = testing_loop(iterations, pairs, mut_prob, mut_range, repr_nr, repr_dispersion, function)
+    #
+    # test_elements, best_standard = testing_loop(iterations, test_elements, mut_prob, mut_range, repr_nr,
+    #                                             repr_dispersion, function)
 
-    random.shuffle(subject)
-    test_elements = []
-    for i in range(len(subject)):
-        test_elements.append([subject[i], value_of_function(subject[i], function)])
-
-    test_elements, best_standard = testing_loop(iterations, test_elements, mut_prob, mut_range, repr_nr,
-                                                repr_dispersion, function, DEBUG, BEST)
+    # TODO zrobic iles razy ten sam algorytm i wyciagnac srednia, albo jeszcze jakieś wariancje itd (może być lepiej)
 
     # Compare results
-    make_statistics(pairs, test_elements, best_test, best_standard, function)
+    # make_statistics(pairs, test_elements, best_test, best_standard, function)

@@ -4,6 +4,8 @@ import random
 import math
 import copy
 
+DEBUG = 0
+BEST = 1
 
 # Mutation of ONLY one number
 def mutate(subject, sigma):
