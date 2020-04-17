@@ -19,22 +19,14 @@ import math
 import copy
 
 
-def get_random_population(number, dimension):
+def get_random_population(length, dimension):
     subject = []
-    for i in range(number * 2):
+    for i in range(length * 2):
         element = []
         for j in range(dimension):
             element.append(random.uniform(-100, 100))
         subject.append(element)
     return subject
-
-
-def mutate(_population):
-    raise NotImplementedError()
-
-
-def crossover(_population):
-    raise NotImplementedError()
 
 
 def get_selection(_selection_type):
@@ -74,8 +66,11 @@ def get_function(_function_type):
         raise AttributeError("Unknown function type", _function_type)
 
 
-def compute_statistics(_population):
-    raise NotImplementedError()
+def compute_statistics(_population): \
+        return 0
+
+
+# raise NotImplementedError()
 
 
 if __name__ == "__main__":
@@ -109,11 +104,10 @@ if __name__ == "__main__":
 
     # TODO Pętla główna też do funkcji
     for i in range(iterations):
-        population = select(population)
-        if rng.random() < crossover_probability:
-            crossover(population)
-        mutate(population)
-        population = replace(population)
+        children = select(pairs)
+        crossing(pairs, children, crossover_probability, func)
+        mutation(children, 5, func)  # TODO dobrac mut_range
+        pairs = replacing(pairs, children)
         compute_statistics(population)
 
     # pairs, best_test = testing_loop(iterations, pairs, mut_prob, mut_range, repr_nr, repr_dispersion, function)

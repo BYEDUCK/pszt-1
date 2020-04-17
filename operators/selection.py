@@ -1,5 +1,6 @@
 def roulette(population):
-    raise NotImplementedError("This type of selection not implemented yet!")
+    return population
+    # raise NotImplementedError("This type of selection not implemented yet!")
 
 
 def tournament(population):

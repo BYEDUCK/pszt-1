@@ -4,8 +4,24 @@ import random
 import math
 import copy
 
-DEBUG = 0
+DEBUG = 1
 BEST = 1
+
+
+def mutation(_population, mut_range, func):
+    for i in range(len(_population)):
+        _population[i] = mutate(_population[i], mut_range)
+        _population[i][len(_population[i]) - 1] = value_of_function(_population[i], func)
+    return 0
+
+
+def crossing(pairs, children, crossover_probability, func):
+    for i in range(len(children)):
+        if random.random() < crossover_probability:
+            children[i] = crossover(pairs, children[i])
+            children[i][len(children[i]) - 1] = value_of_function(children[i], func)
+    return 0
+
 
 # Mutation of ONLY one number
 def mutate(subject, sigma):
