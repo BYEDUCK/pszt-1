@@ -8,7 +8,17 @@ from options.replacement_types import ReplacementType
 from options.selection_type import SelectionType
 from utils.functions import *
 from utils.opt_parser import *
+from evolution_algorithm.main_functions import *
+from evolution_algorithm.testing_functions import *
+from evolution_algorithm.stats import *
+# import numpy
+import sys
+import random
+import math
+import copy
 
+DEBUG = 0
+BEST = 1
 
 def get_random_population():
     return []
@@ -90,4 +100,13 @@ if __name__ == "__main__":
 
 # TODO to samo, ale z parami
 
-# TODO eksport i porównanie wyników
+    random.shuffle(subject)
+    test_elements = []
+    for i in range(len(subject)):
+        test_elements.append([subject[i], value_of_function(subject[i], function)])
+
+    test_elements, best_standard = testing_loop(iterations, test_elements, mut_prob, mut_range, repr_nr,
+                                                repr_dispersion, function, DEBUG, BEST)
+
+    # Compare results
+    make_statistics(pairs, test_elements, best_test, best_standard, function)
