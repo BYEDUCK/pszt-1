@@ -1,25 +1,28 @@
-from evolution_algorithm.testing_functions import *
 import sys
 import random
-import math
 import copy
 
-DEBUG = 1
+DEBUG = 0
 BEST = 1
+
+
+def get_random_population(length, dimension):
+    subject = []
+    for i in range(length):
+        element = []
+        for j in range(dimension):
+            element.append(random.uniform(-100, 100))
+        subject.append(element)
+    return subject
 
 
 def mutation(_population, mut_range, func):
     for i in range(len(_population)):
         _population[i] = mutate(_population[i], mut_range)
-        _population[i][len(_population[i]) - 1] = value_of_function(_population[i], func)
-    return 0
-
-
-def crossing(pairs, children, crossover_probability, func):
-    for i in range(len(children)):
-        if random.random() < crossover_probability:
-            children[i] = crossover(pairs, children[i])
-            children[i][len(children[i]) - 1] = value_of_function(children[i], func)
+        min_temp = _population[i][len(_population[i]) - 1]
+        for j in range(len(_population[i]) - 1):
+            min_temp = min(min_temp, func(_population[i][j]))
+        _population[i][len(_population[i]) - 1] = min_temp
     return 0
 
 
@@ -35,6 +38,18 @@ def mutate(subject, sigma):
     else:
         sys.exit('Mutation - unknown subject element')
     return subject
+
+
+def crossing(pairs, children, crossover_probability, func):
+    for i in range(len(children)):
+        if random.random() < crossover_probability:
+            children[i] = crossover(pairs, children[i])
+            # TODO to się dwa razy powtarza
+            min_temp = func(children[i][0])
+            for j in range(len(children[i]) - 1):
+                min_temp = min(min_temp, func(children[i][j]))
+            children[i][len(children[i]) - 1] = min_temp
+    return 0
 
 
 def crossover(base, subject):
@@ -62,7 +77,7 @@ def replacing(base, insert):
     return pom_list[:len(base)]
 
 
-def testing_loop(iterations, population, mut_prob, mut_range, repr_nr, repr_dispersion, function, DEBUG, BEST):
+def testing_loop(iterations, population, cross_prob, mut_range, fun, select, replace):
     population.sort(key=lambda pom: pom[len(pom) - 1])
     if DEBUG:
         print("default", population)
@@ -72,45 +87,30 @@ def testing_loop(iterations, population, mut_prob, mut_range, repr_nr, repr_disp
         if DEBUG:
             print("iteration", i)
 
-        pom_pair = []
         if DEBUG:
-            print("start", pom_pair)
-        # TODO reprodukcja
-        for j in range(repr_nr):
-            pom = math.floor(abs(random.gauss(0, repr_dispersion)))
-            while pom >= len(population):
-                pom = math.floor(abs(random.gauss(0, repr_dispersion)))
-            pom_pair.append(copy.deepcopy(population[pom]))
+            print("start", population)
+        children = copy.deepcopy(select(population))
         if DEBUG:
-            print("reproducted", pom_pair, "\t", len(pom_pair))
+            print("reproducted", children, "\t", len(children))
 
-        new_pairs = []
-        # Cross or mutate (all have to do sth)
-        for j in range(len(pom_pair)):
-            pom = []
-            if random.random() < mut_prob:
-                pom = mutate(pom_pair[j], mut_range)
-            else:
-                pom = crossover(pom_pair, pom_pair[j])
+        # Cross
+        crossing(population, children, cross_prob, fun)
 
-            min_temp = value_of_function(pom[0], function)
-            for k in range(len(pom) - 1):
-                min_temp = min(min_temp, value_of_function(pom[k], function))
-            pom[len(pom) - 1] = min_temp
-
-            new_pairs.append(pom)
+        # Mutate
+        mutation(children, mut_range, fun)
 
         # Replacing worst subjects
         if DEBUG:
-            print("Cross or mutation", new_pairs, "\t", len(new_pairs))
+            print("Cross or mutation", children, "\t", len(children))
             print("not substituted", population, "\t", len(population))
-        population = replacing(population, new_pairs)
+        population = replacing(population, children)
         if DEBUG:
             print("substituted", population, "\t", len(population))
 
         if BEST:
             print("best", population[0])
         best_test.append(population[0][len(population[0]) - 1])
+        # compute_statistics(population)
 
     if BEST:
         print([row[len(row) - 1] for row in population])
