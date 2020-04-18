@@ -1,5 +1,10 @@
-import statistics
 import matplotlib.pyplot as plt
+import statistics
+
+
+def compute_statistics(_population):
+    # TODO zaimplementować
+    return 0
 
 
 def make_statistics(final_test, final_standard, best_at_step_test, best_at_step_standard, function):

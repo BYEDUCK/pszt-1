@@ -1,5 +1,6 @@
-import math
+from options.function_types import FunctionType
 from functools import reduce
+import math
 
 
 def griewank(x):
@@ -28,6 +29,28 @@ def cosine_mixture(x):
 
 def _sum_of_squares(x):
     return sum(map(lambda a: a ** 2, x))
+
+
+def get_function(_function_type):
+    if _function_type == FunctionType.ALPINE_1:
+        return alpine_1
+    elif _function_type == FunctionType.CIGAR:
+        return cigar
+    elif _function_type == FunctionType.COSINE_MIXTURE:
+        return cosine_mixture
+    elif _function_type == FunctionType.GRIEWANK:
+        return griewank
+    elif _function_type == FunctionType.SCHWEFEL:
+        return schwefel
+    else:
+        raise AttributeError("Unknown function type", _function_type)
+
+
+def min_of_function(subject, fun):
+    min_temp = fun(subject[0])
+    for j in range(len(subject) - 1):
+        min_temp = min(min_temp, fun(subject[j]))
+    return min_temp
 
 
 if __name__ == "__main__":
