@@ -1,4 +1,3 @@
-from operators.replacement import default_replacing
 from utils.functions import *
 
 import sys
@@ -7,7 +6,7 @@ import copy
 import statistics as stat
 
 DEBUG = 0
-BEST = 0
+BEST = 1
 
 
 def get_random_population(length, dimension):
@@ -66,6 +65,7 @@ def crossover(base, subject):
 
 def testing_loop(iterations, population, cross_prob, mut_range, fun, select, replace):
     population.sort(key=lambda pom: pom[len(pom) - 1])
+    DEBUG = 0
     if DEBUG:
         print("default", population)
 
@@ -74,13 +74,16 @@ def testing_loop(iterations, population, cross_prob, mut_range, fun, select, rep
     pvar_step = []
     pstdev_step = []
     for i in range(iterations):
+        if i > 15 and best_step[i-1] == best_step[i - 11]:
+            DEBUG = 1
+
         if DEBUG:
             print("iteration", i)
 
         # Reproduction
         if DEBUG:
             print("start", population)
-        children = copy.deepcopy(select(population))
+        children = copy.deepcopy(select(population, math.floor(len(population) * 1.5)))
         if DEBUG:
             print("reproducted", children, "\t", len(children))
 
@@ -94,8 +97,7 @@ def testing_loop(iterations, population, cross_prob, mut_range, fun, select, rep
         if DEBUG:
             print("Cross or mutation", children, "\t", len(children))
             print("not substituted", population, "\t", len(population))
-        # TODO przerobić na prawidłowe replace
-        population = default_replacing(population, children)
+        population = replace(population, children)
         if DEBUG:
             print("substituted", population, "\t", len(population))
 

@@ -9,8 +9,8 @@ def plot_statistics(best_pairs, best_standard, awg_pairs, awg_standard, var_pair
                         "Średnia wartość funkcji w kolejnych iteracjach")
     _compare_every_step(_average_results(var_pairs), _average_results(var_standard),
                         "Wariancja wartości funkcji w kolejnych iteracjach")
-    _compare_every_step(_average_results(dev_pairs), _average_results(dev_standard),
-                        "Odchylenie standardowe wartości funkcji w kolejnych iteracjach")
+    # _compare_every_step(_average_results(dev_pairs), _average_results(dev_standard),
+    #                     "Odchylenie standardowe wartości funkcji w kolejnych iteracjach")
     return 0
 
 
@@ -30,7 +30,7 @@ def _average_results(in_data):
 def _compare_every_step(tested, standard, title):
     plt.plot(tested)
     plt.plot(standard)
-    if tested[len(tested)-1] > 0 and standard[len(standard)-1] > 0:
+    if tested[len(tested) - 1] >= 0 and standard[len(standard) - 1] > 0:
         plt.yscale("log")
     plt.grid(True, which="both")
     plt.title(title)

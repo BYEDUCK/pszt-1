@@ -7,7 +7,7 @@ from utils.opt_parser import OptConfig
 def get_opt_config():
     return [
         OptConfig("sel_type", "s", str, "roulette", lambda s: validate_value_in_enum(s, SelectionType)),
-        OptConfig("rep_type", "r", str, "elite", lambda s: validate_value_in_enum(s, ReplacementType)),
+        OptConfig("rep_type", "r", str, "generation+", lambda s: validate_value_in_enum(s, ReplacementType)),
         OptConfig("iterations", "i", int, 100, lambda x: 10 <= x <= 1000),
         OptConfig("function", "f", str, "cigar", lambda s: validate_value_in_enum(s, FunctionType)),
         OptConfig("dimensions", "d", int, 2, lambda x: 2 <= x <= 10),

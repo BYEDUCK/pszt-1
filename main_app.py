@@ -11,6 +11,9 @@ from evolution_algorithm.stats import *
 
 import sys
 import random
+import math
+import time
+import datetime
 
 if __name__ == "__main__":
     parser = OptParser(get_opt_config())
@@ -28,11 +31,13 @@ if __name__ == "__main__":
     replace = get_replacement(replacement_type)
 
     # Meke population and pair population with same same start points
-    pair_nr = 10
-    iterations = 100  # TODO docelowo wywalić
+    pair_nr = 100
+    iterations = 1000  # TODO docelowo wywalić
+    dimensions = 10
+    attempts = 100
     mut_range = 5  # TODO dobrac mut_range
 
-    # TODO 25/50 iteracji
+    # Making average of @attempts results
     best_pairs = []
     best_st = []
     awg_pairs = []
@@ -41,8 +46,9 @@ if __name__ == "__main__":
     var_st = []
     dev_pairs = []
     dev_st = []
-    for h in range(100):
-        print(h, "%", end='\r')
+    start = time.time()
+    for h in range(attempts):
+        print("\t", math.floor(h / attempts * 100), "%", end='\r')
         population = get_random_population(pair_nr * 2, dimensions)
         # TODO wywalić do funkcji ???
         pairs = []
@@ -75,9 +81,10 @@ if __name__ == "__main__":
         dev_pairs.append(pstdev_step)
         dev_st.append(pstdev_standard)
 
-    print("100%", end='\r')
+    stop = time.time()
+    print("\t", "100%", end='\r')
 
     # Compare results
     plot_statistics(best_pairs, best_st, awg_pairs, awg_st, var_pairs, var_st, dev_pairs, dev_st)
 
-    print("Complete")
+    print("Complete, calculation time: ", datetime.timedelta(seconds=(stop - start)))
