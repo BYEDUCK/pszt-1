@@ -28,27 +28,53 @@ if __name__ == "__main__":
 
     # Meke population and pair population with same same start points
     pair_nr = 10
-    iterations = 10  # TODO docelowo wywalić
+    iterations = 100  # TODO docelowo wywalić
     mut_range = 5  # TODO dobrac mut_range
-    population = get_random_population(pair_nr * 2, dimensions)
-    # TODO wywalić do funkcji ???
-    pairs = []
-    for i in range(pair_nr):
-        pom0 = population[2 * i]
-        pom1 = population[2 * i + 1]
-        pairs.append([pom0, pom1, min(fun(pom0), fun(pom1))])
 
-    test_elements = []
-    for i in range(len(population)):
-        test_elements.append([population[i], fun(population[i])])
+    # TODO 25/50 iteracji
+    best_pairs = []
+    best_st = []
+    awg_pairs = []
+    awg_st = []
+    var_pairs = []
+    var_st = []
+    dev_pairs = []
+    dev_st = []
+    for h in range(100):
+        print(h, "%", end='\r')
+        population = get_random_population(pair_nr * 2, dimensions)
+        # TODO wywalić do funkcji ???
+        pairs = []
+        for i in range(pair_nr):
+            pom0 = population[2 * i]
+            pom1 = population[2 * i + 1]
+            pairs.append([pom0, pom1, min(fun(pom0), fun(pom1))])
 
-    # Loop
-    pairs, best_test = testing_loop(iterations, pairs, crossover_probability, mut_range, fun, select, replace)
+        test_elements = []
+        for i in range(len(population)):
+            test_elements.append([population[i], fun(population[i])])
 
-    test_elements, best_standard = testing_loop(iterations, test_elements, crossover_probability, mut_range, fun,
-                                                select, replace)
+        # Loop
+        pairs, best_test, awg_step, pvar_step, pstdev_step = testing_loop(iterations, pairs, crossover_probability,
+                                                                          mut_range, fun, select, replace)
 
-    # TODO zrobic iles razy ten sam algorytm i wyciagnac srednia, albo jeszcze jakieś wariancje itd (może być lepiej)
+        test_elements, best_standard, awg_standard, pvar_standard, pstdev_standard = testing_loop(iterations,
+                                                                                                  test_elements,
+                                                                                                  crossover_probability,
+                                                                                                  mut_range, fun,
+                                                                                                  select, replace)
+        best_pairs.append(best_test)
+        best_st.append(best_standard)
+        awg_pairs.append(awg_step)
+        awg_st.append(awg_standard)
+        var_pairs.append(pvar_step)
+        var_st.append(pvar_standard)
+        dev_pairs.append(pstdev_step)
+        dev_st.append(pstdev_standard)
+
+    print("100%", end='\r')
 
     # Compare results
-    # make_statistics(pairs, test_elements, best_test, best_standard, function)
+    plot_statistics(best_pairs, best_st, awg_pairs, awg_st, var_pairs, var_st, dev_pairs, dev_st)
+
+    print("Complete")

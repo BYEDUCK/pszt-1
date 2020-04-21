@@ -12,6 +12,7 @@ def elite(population):
 def steady_state(population):
     raise NotImplementedError("This type of replacement not implemented yet!")
 
+
 def default_replacing(base, insert):
     pom_list = base + insert
     pom_list.sort(key=lambda pom: pom[len(base[0]) - 1])

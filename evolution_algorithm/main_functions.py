@@ -4,9 +4,10 @@ from utils.functions import *
 import sys
 import random
 import copy
+import statistics as stat
 
 DEBUG = 0
-BEST = 1
+BEST = 0
 
 
 def get_random_population(length, dimension):
@@ -68,7 +69,10 @@ def testing_loop(iterations, population, cross_prob, mut_range, fun, select, rep
     if DEBUG:
         print("default", population)
 
-    best_test = []
+    best_step = []
+    awg_step = []
+    pvar_step = []
+    pstdev_step = []
     for i in range(iterations):
         if DEBUG:
             print("iteration", i)
@@ -90,16 +94,26 @@ def testing_loop(iterations, population, cross_prob, mut_range, fun, select, rep
         if DEBUG:
             print("Cross or mutation", children, "\t", len(children))
             print("not substituted", population, "\t", len(population))
-        population = default_replacing(population, children)  # TODO przerobić na prawidłowe replace
+        # TODO przerobić na prawidłowe replace
+        population = default_replacing(population, children)
         if DEBUG:
             print("substituted", population, "\t", len(population))
 
+        stat_pom = []
+        for j in range(len(population)):
+            stat_pom.append(population[j][len(population[0]) - 1])
+
+        awg_step.append(stat.mean(stat_pom))
+        pvar_step.append(stat.pvariance(stat_pom))
+        pstdev_step.append(stat.pstdev(stat_pom))
+        best_step.append(population[0][len(population[0]) - 1])
+
         if BEST:
-            print("best", population[0])
-        best_test.append(population[0][len(population[0]) - 1])
-        # compute_statistics(population)
+            print("best", best_step[i])
+        if DEBUG:
+            print("awg", awg_step[i], "\t", "variance", pvar_step[i], "\t", "st deviation", pstdev_step[i], "\t", )
 
     if BEST:
         print([row[len(row) - 1] for row in population])
 
-    return population, best_test
+    return population, best_step, awg_step, pvar_step, pstdev_step

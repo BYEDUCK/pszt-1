@@ -2,6 +2,7 @@ from options.selection_type import SelectionType
 
 
 def roulette(population):
+    # TODO Napisać tąselekcję
     return population
     # raise NotImplementedError("This type of selection not implemented yet!")
 
