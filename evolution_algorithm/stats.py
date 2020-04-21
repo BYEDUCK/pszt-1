@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import statistics as stat
 
 
 def plot_statistics(best_pairs, best_standard, awg_pairs, awg_standard, var_pairs, var_standard, dev_pairs,
@@ -31,7 +30,8 @@ def _average_results(in_data):
 def _compare_every_step(tested, standard, title):
     plt.plot(tested)
     plt.plot(standard)
-    plt.yscale("log")
+    if tested[len(tested)-1] > 0 and standard[len(standard)-1] > 0:
+        plt.yscale("log")
     plt.grid(True, which="both")
     plt.title(title)
     plt.xlabel("Iteracja")

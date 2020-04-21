@@ -8,6 +8,7 @@ from utils.functions import *
 from utils.opt_parser import *
 from evolution_algorithm.main_functions import *
 from evolution_algorithm.stats import *
+
 import sys
 import random
 
@@ -51,7 +52,8 @@ if __name__ == "__main__":
             pairs.append([pom0, pom1, min(fun(pom0), fun(pom1))])
 
         test_elements = []
-        for i in range(len(population)):
+        random.shuffle(population)
+        for i in range(len(population)):  # TODO ilość par czy 2* ilośc par???
             test_elements.append([population[i], fun(population[i])])
 
         # Loop
@@ -63,6 +65,7 @@ if __name__ == "__main__":
                                                                                                   crossover_probability,
                                                                                                   mut_range, fun,
                                                                                                   select, replace)
+
         best_pairs.append(best_test)
         best_st.append(best_standard)
         awg_pairs.append(awg_step)
