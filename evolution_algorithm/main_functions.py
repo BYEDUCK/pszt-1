@@ -27,14 +27,18 @@ def mutation(_population, mut_range, func):
 
 
 def mutate(subject, sigma):
-    x = random.randint(0, len(subject) - 2)
-    if type(subject[0]) == int or type(subject[0]) == float:
-        sys.exit('Mutation - int or float')
-    elif type(subject[0]) == list:
-        y = random.randint(0, len(subject[x]) - 1)
-        subject[x][y] = random.gauss(subject[x][y], sigma)
-    else:
-        sys.exit('Mutation - unknown subject element')
+    # Mutate one in union
+    # x = random.randint(0, len(subject) - 2)
+
+    # Mutate one in every person in union
+    for x in range(len(subject) - 1):
+        if type(subject[0]) == int or type(subject[0]) == float:
+            sys.exit('Mutation - int or float')
+        elif type(subject[0]) == list:
+            y = random.randint(0, len(subject[x]) - 1)
+            subject[x][y] = random.gauss(subject[x][y], sigma)
+        else:
+            sys.exit('Mutation - unknown subject element')
     return subject
 
 
@@ -76,7 +80,7 @@ def testing_loop(iterations, population, cross_prob, mut_range, fun, select, rep
         # if i > 15 and best_step[i-1] == best_step[i - 11]:
         #     DEBUG = 1
 
-        if DEBUG:
+        if DEBUG or BEST:
             print("iteration", i)
 
         # Reproduction
@@ -110,7 +114,8 @@ def testing_loop(iterations, population, cross_prob, mut_range, fun, select, rep
         best_step.append(population[0][len(population[0]) - 1])
 
         if BEST:
-            print("best", best_step[i])
+            print([row[len(row) - 1] for row in population])
+            print("best", population[0])
         if DEBUG:
             print("awg", awg_step[i], "\t", "variance", pvar_step[i], "\t", "st deviation", pstdev_step[i], "\t", )
 
