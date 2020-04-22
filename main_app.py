@@ -50,27 +50,16 @@ if __name__ == "__main__":
     for h in range(attempts):
         print("\t", math.floor(h / attempts * 100), "%", end='\r')
         population = get_random_population(pair_nr * 2, dimensions)
-        # TODO wywalić do funkcji ???
-        pairs = []
-        for i in range(pair_nr):
-            pom0 = population[2 * i]
-            pom1 = population[2 * i + 1]
-            pairs.append([pom0, pom1, min(fun(pom0), fun(pom1))])
-
-        test_elements = []
-        random.shuffle(population)
-        for i in range(len(population)):  # TODO ilość par czy 2* ilośc par???
-            test_elements.append([population[i], fun(population[i])])
 
         # Loop
-        pairs, best_test, awg_step, pvar_step, pstdev_step = testing_loop(iterations, pairs, crossover_probability,
-                                                                          mut_range, fun, select, replace)
+        pairs = make_groups(population, 2, fun)
+        _, best_test, awg_step, pvar_step, pstdev_step = testing_loop(iterations, pairs, crossover_probability,
+                                                                      mut_range, fun, select, replace)
 
-        test_elements, best_standard, awg_standard, pvar_standard, pstdev_standard = testing_loop(iterations,
-                                                                                                  test_elements,
-                                                                                                  crossover_probability,
-                                                                                                  mut_range, fun,
-                                                                                                  select, replace)
+        test_elements = make_groups(population, 1, fun)
+        _, best_standard, awg_standard, pvar_standard, pstdev_standard = testing_loop(iterations, test_elements,
+                                                                                      crossover_probability, mut_range,
+                                                                                      fun, select, replace)
 
         best_pairs.append(best_test)
         best_st.append(best_standard)

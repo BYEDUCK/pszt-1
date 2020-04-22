@@ -1,8 +1,23 @@
 import matplotlib.pyplot as plt
 
 
+def _best_of_all(best_pairs, best_standard):
+    best1 = best_pairs[0][len(best_pairs[0]) - 1]
+    for i in range(len(best_pairs)):
+        best1 = min(best1, best_pairs[i][len(best_pairs[i]) - 1])
+
+    best2 = best_standard[0][len(best_standard[0]) - 1]
+    for i in range(len(best_standard)):
+        best2 = min(best2, best_standard[i][len(best_standard[i]) - 1])
+
+    print("Najlepsze otrzymane dopasowanie przy użyciu testowanego algorytmu", best1)
+    print("Najlepsze otrzymane dopasowanie przy użyciu standardowego algorytmu", best2)
+    return 0
+
+
 def plot_statistics(best_pairs, best_standard, awg_pairs, awg_standard, var_pairs, var_standard, dev_pairs,
                     dev_standard):
+    _best_of_all(best_pairs, best_standard)
     _compare_every_step(_average_results(best_pairs), _average_results(best_standard),
                         "Najlepsza wartość funkcji w kolejnych iteracjach")
     _compare_every_step(_average_results(awg_pairs), _average_results(awg_standard),

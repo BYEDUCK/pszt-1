@@ -9,6 +9,23 @@ DEBUG = 0
 BEST = 0
 
 
+def make_groups(population, size_of_group, func):
+    if len(population) % size_of_group != 0:
+        sys.exit('Can\'t group elements')
+
+    group = []
+    random.shuffle(population)
+    for i in range(math.floor(len(population) / size_of_group)):
+        pom = []
+        for j in range(size_of_group):
+            pom.append(population[size_of_group * i + j])
+        pom.append(0)
+        pom[size_of_group] = min_of_function(pom, func)
+        group.append(pom)
+
+    return group
+
+
 def get_random_population(length, dimension):
     subject = []
     for i in range(length):
@@ -46,7 +63,8 @@ def crossing(pairs, children, crossover_probability, func):
     for i in range(len(children)):
         if random.random() < crossover_probability:
             children[i] = crossover(pairs, children[i])
-            children[i][len(children[i]) - 1] = min_of_function(children[i], func)
+            # Wywalone w celu optymalizacji - dopóki mutation jest obowiązkowe to poniższe jest niepotrzebne
+            # children[i][len(children[i]) - 1] = min_of_function(children[i], func)
     return 0
 
 
@@ -77,9 +95,6 @@ def testing_loop(iterations, population, cross_prob, mut_range, fun, select, rep
     pvar_step = []
     pstdev_step = []
     for i in range(iterations):
-        # if i > 15 and best_step[i-1] == best_step[i - 11]:
-        #     DEBUG = 1
-
         if DEBUG or BEST:
             print("iteration", i)
 
