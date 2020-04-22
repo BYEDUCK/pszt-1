@@ -6,7 +6,7 @@ import copy
 import statistics as stat
 
 DEBUG = 0
-BEST = 1
+BEST = 0
 
 
 def get_random_population(length, dimension):
@@ -65,7 +65,6 @@ def crossover(base, subject):
 
 def testing_loop(iterations, population, cross_prob, mut_range, fun, select, replace):
     population.sort(key=lambda pom: pom[len(pom) - 1])
-    DEBUG = 0
     if DEBUG:
         print("default", population)
 
@@ -74,8 +73,8 @@ def testing_loop(iterations, population, cross_prob, mut_range, fun, select, rep
     pvar_step = []
     pstdev_step = []
     for i in range(iterations):
-        if i > 15 and best_step[i-1] == best_step[i - 11]:
-            DEBUG = 1
+        # if i > 15 and best_step[i-1] == best_step[i - 11]:
+        #     DEBUG = 1
 
         if DEBUG:
             print("iteration", i)
