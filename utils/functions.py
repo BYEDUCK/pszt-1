@@ -41,6 +41,15 @@ def bird(x):
     return part_1 + part_2 + part_3
 
 
+def brain_1(x):
+    # two dimensional only!
+    if len(x) != 2:
+        raise ValueError("this function can only be 2d")
+    part_1 = -1.275 * ((x[0] ** 2) / (math.pi ** 2)) + (5 * (x[0] / math.pi)) + x[1] - 6
+    part_2 = (10 - (5 / (4 * math.pi))) * math.cos(x[0])
+    return part_1 ** 2 + part_2 + 10
+
+
 def _sum_of_squares(x):
     return sum(map(lambda a: a ** 2, x))
 
@@ -58,6 +67,8 @@ def get_function(_function_type):
         return ackley
     elif _function_type == FunctionType.BIRD:
         return bird
+    elif _function_type == FunctionType.BRAIN_1:
+        return brain_1
     else:
         raise AttributeError("Unknown function type", _function_type)
 
