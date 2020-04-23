@@ -31,6 +31,16 @@ def ackley(x):
     return -20 * part_1 - part_2 + 20 + math.e
 
 
+def bird(x):
+    # two dimensional only!
+    if len(x) != 2:
+        raise ValueError("this function can only be 2d")
+    part_1 = math.sin(x[0]) * math.exp((1 - math.cos(x[1])) ** 2)
+    part_2 = math.cos(x[1]) * math.exp((1 - math.sin(x[0])) ** 2)
+    part_3 = (x[0] - x[1]) ** 2
+    return part_1 + part_2 + part_3
+
+
 def _sum_of_squares(x):
     return sum(map(lambda a: a ** 2, x))
 
@@ -46,6 +56,8 @@ def get_function(_function_type):
         return schwefel
     elif _function_type == FunctionType.ACKLEY:
         return ackley
+    elif _function_type == FunctionType.BIRD:
+        return bird
     else:
         raise AttributeError("Unknown function type", _function_type)
 

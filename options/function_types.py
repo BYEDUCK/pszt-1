@@ -7,3 +7,4 @@ class FunctionType(Enum):
     ALPINE_1 = "alpine-1"
     CIGAR = "cigar"
     ACKLEY = "ackley"
+    BIRD = "bird"
