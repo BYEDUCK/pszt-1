@@ -12,7 +12,10 @@ def get_opt_config():
         OptConfig("function", "f", str, "cigar", lambda s: validate_value_in_enum(s, FunctionType)),
         OptConfig("dimensions", "d", int, 2, lambda x: 2 <= x <= 10),
         OptConfig("mutation_type", "m", str),
-        OptConfig("crossover_p", "C", float, 0.5, lambda x: 0.01 <= x <= 1.0)
+        OptConfig("crossover_p", "C", float, 0.5, lambda x: 0.01 <= x <= 1.0),
+        OptConfig("cardinality", "n", int, 200, lambda x: 50 <= x <= 1000 and x % 2 == 0),
+        OptConfig("attempts", "a", int, 1, lambda x: 1 <= x <= 50),
+        OptConfig("mut_sigma", "s", float, 5, lambda x: 0 <= x <= 100)
     ]
 
 

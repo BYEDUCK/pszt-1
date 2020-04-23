@@ -2,13 +2,13 @@ import matplotlib.pyplot as plt
 
 
 def _best_of_all(best_pairs, best_standard):
-    best1 = best_pairs[0][len(best_pairs[0]) - 1]
+    best1 = best_pairs[0][-1]
     for i in range(len(best_pairs)):
-        best1 = min(best1, best_pairs[i][len(best_pairs[i]) - 1])
+        best1 = min(best1, best_pairs[i][-1])
 
-    best2 = best_standard[0][len(best_standard[0]) - 1]
+    best2 = best_standard[0][-1]
     for i in range(len(best_standard)):
-        best2 = min(best2, best_standard[i][len(best_standard[i]) - 1])
+        best2 = min(best2, best_standard[i][-1])
 
     print("Najlepsze otrzymane dopasowanie przy użyciu testowanego algorytmu", best1)
     print("Najlepsze otrzymane dopasowanie przy użyciu standardowego algorytmu", best2)
@@ -45,7 +45,7 @@ def _average_results(in_data):
 def _compare_every_step(tested, standard, title):
     plt.plot(tested)
     plt.plot(standard)
-    if tested[len(tested) - 1] >= 0 and standard[len(standard) - 1] > 0:
+    if tested[len(tested) - 1] >= 0 and standard[-1] > 0:
         plt.yscale("log")
     plt.grid(True, which="both")
     plt.title(title)

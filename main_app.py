@@ -1,19 +1,14 @@
+import datetime
+import time
+
+from evolution_algorithm.main_functions import *
+from evolution_algorithm.stats import *
 from operators.replacement import *
 from operators.selection import *
-from options.function_types import FunctionType
 from options.opt_config import get_opt_config
 from options.replacement_types import ReplacementType
 from options.selection_type import SelectionType
-from utils.functions import *
 from utils.opt_parser import *
-from evolution_algorithm.main_functions import *
-from evolution_algorithm.stats import *
-
-import sys
-import random
-import math
-import time
-import datetime
 
 if __name__ == "__main__":
     parser = OptParser(get_opt_config())
@@ -25,17 +20,13 @@ if __name__ == "__main__":
     crossover_probability = parsedOptions["crossover_p"]
     dimensions = parsedOptions["dimensions"]
     iterations = parsedOptions["iterations"]
+    cardinality = parsedOptions["cardinality"]
+    attempts = parsedOptions["attempts"]
+    mut_range = parsedOptions["mut_sigma"]
 
     fun = get_function(function_type)
     select = get_selection(selection_type)
     replace = get_replacement(replacement_type)
-
-    # Meke population and pair population with same same start points
-    pair_nr = 100
-    iterations = 1000  # TODO docelowo wywalić
-    dimensions = 10
-    attempts = 100
-    mut_range = 5  # TODO dobrac mut_range
 
     # Making average of @attempts results
     best_pairs = []
@@ -49,17 +40,18 @@ if __name__ == "__main__":
     start = time.time()
     for h in range(attempts):
         print("\t", math.floor(h / attempts * 100), "%", end='\r')
-        population = get_random_population(pair_nr * 2, dimensions)
+        population = get_random_population(cardinality, dimensions)
 
         # Loop
-        pairs = make_groups(population, 2, fun)
-        _, best_test, awg_step, pvar_step, pstdev_step = testing_loop(iterations, pairs, crossover_probability,
-                                                                      mut_range, fun, select, replace)
+        pairs = make_pairs(population, fun)
+        _, best_test, awg_step, pvar_step, pstdev_step = evolution_loop(iterations, pairs, crossover_probability,
+                                                                        mut_range, fun, select, replace)
 
-        test_elements = make_groups(population, 1, fun)
-        _, best_standard, awg_standard, pvar_standard, pstdev_standard = testing_loop(iterations, test_elements,
-                                                                                      crossover_probability, mut_range,
-                                                                                      fun, select, replace)
+        test_elements = make_singles(population, fun)
+        _, best_standard, awg_standard, pvar_standard, pstdev_standard = evolution_loop(iterations, test_elements,
+                                                                                        crossover_probability,
+                                                                                        mut_range,
+                                                                                        fun, select, replace)
 
         best_pairs.append(best_test)
         best_st.append(best_standard)

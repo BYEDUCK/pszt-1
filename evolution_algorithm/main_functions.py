@@ -1,12 +1,20 @@
-from utils.functions import *
-
-import sys
-import random
 import copy
+import random
 import statistics as stat
+import sys
+
+from utils.functions import *
 
 DEBUG = 0
 BEST = 0
+
+
+def make_pairs(population, func):
+    return make_groups(population, 2, func)
+
+
+def make_singles(population, func):
+    return make_groups(population, 1, func)
 
 
 def make_groups(population, size_of_group, func):
@@ -39,7 +47,7 @@ def get_random_population(length, dimension):
 def mutation(_population, mut_range, func):
     for i in range(len(_population)):
         _population[i] = mutate(_population[i], mut_range)
-        _population[i][len(_population[i]) - 1] = min_of_function(_population[i], func)
+        _population[i][-1] = min_of_function(_population[i], func)
     return 0
 
 
@@ -49,13 +57,8 @@ def mutate(subject, sigma):
 
     # Mutate one in every person in union
     for x in range(len(subject) - 1):
-        if type(subject[0]) == int or type(subject[0]) == float:
-            sys.exit('Mutation - int or float')
-        elif type(subject[0]) == list:
-            y = random.randint(0, len(subject[x]) - 1)
-            subject[x][y] = random.gauss(subject[x][y], sigma)
-        else:
-            sys.exit('Mutation - unknown subject element')
+        y = random.randint(0, len(subject[x]) - 1)
+        subject[x][y] = random.gauss(subject[x][y], sigma)
     return subject
 
 
@@ -69,24 +72,19 @@ def crossing(pairs, children, crossover_probability, func):
 
 
 def crossover(base, subject):
+    # TODO przyjrzeć się bo mam wątpliwości
     pom = random.randint(0, len(base) - 1)
     pom_pair = base[pom]
-    if type(subject[0]) == int or type(subject[0]) == float:
-        sys.exit('Crossover - int or float')
-    elif type(subject[0]) == list:
-        # TODO przyjrzeć się bo mam wątpliwości
-        pom_lists = [[0 for x in range(len(subject[0]))] for y in range(len(subject))]
-        for i in range(len(subject) - 1):
-            for j in range(len(subject[i])):
-                pom_lists[i][j] = (random.uniform(subject[i][j], pom_pair[i][j]))
-        subject = pom_lists
-    else:
-        sys.exit('Crossover - unknown subject element')
+    pom_lists = [[0 for x in range(len(subject[0]))] for y in range(len(subject))]
+    for i in range(len(subject) - 1):
+        for j in range(len(subject[i])):
+            pom_lists[i][j] = (random.uniform(subject[i][j], pom_pair[i][j]))
+    subject = pom_lists
     return subject
 
 
-def testing_loop(iterations, population, cross_prob, mut_range, fun, select, replace):
-    population.sort(key=lambda pom: pom[len(pom) - 1])
+def evolution_loop(iterations, population, cross_prob, mut_range, fun, select, replace):
+    population.sort(key=lambda pom: pom[-1])
     if DEBUG:
         print("default", population)
 
@@ -121,20 +119,20 @@ def testing_loop(iterations, population, cross_prob, mut_range, fun, select, rep
 
         stat_pom = []
         for j in range(len(population)):
-            stat_pom.append(population[j][len(population[0]) - 1])
+            stat_pom.append(population[j][-1])
 
         awg_step.append(stat.mean(stat_pom))
         pvar_step.append(stat.pvariance(stat_pom))
         pstdev_step.append(stat.pstdev(stat_pom))
-        best_step.append(population[0][len(population[0]) - 1])
+        best_step.append(population[0][-1])
 
         if BEST:
-            print([row[len(row) - 1] for row in population])
+            print([row[-1] for row in population])
             print("best", population[0])
         if DEBUG:
             print("awg", awg_step[i], "\t", "variance", pvar_step[i], "\t", "st deviation", pstdev_step[i], "\t", )
 
     if BEST:
-        print([row[len(row) - 1] for row in population])
+        print([row[-1] for row in population])
 
     return population, best_step, awg_step, pvar_step, pstdev_step

@@ -1,6 +1,7 @@
-from options.function_types import FunctionType
-from functools import reduce
 import math
+from functools import reduce
+
+from options.function_types import FunctionType
 
 
 def griewank(x):
