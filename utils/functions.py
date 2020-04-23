@@ -4,6 +4,8 @@ from functools import reduce
 from options.function_types import FunctionType
 
 
+# http://infinity77.net/global_optimization/test_functions_nd_A.html
+
 def griewank(x):
     part_1 = _sum_of_squares(x)
     part_2 = reduce(lambda a, b: a * b, map(lambda a: math.cos(a[1] / math.sqrt(a[0] + 1)), enumerate(x)))
@@ -22,10 +24,11 @@ def cigar(x, c=1000000):
     return x[0] ** 2 + c * _sum_of_squares(x[1:])
 
 
-def cosine_mixture(x):
-    part_1 = sum(map(lambda a: math.cos(5 * math.pi * a), x))
-    part_2 = _sum_of_squares(x)
-    return -0.1 * part_1 - part_2
+def ackley(x):
+    n = len(x)
+    part_1 = math.exp(-0.2 * math.sqrt(1 / n * _sum_of_squares(x)))
+    part_2 = math.exp(1 / n * sum(map(lambda a: math.cos(2 * math.pi * a), x)))
+    return -20 * part_1 - part_2 + 20 + math.e
 
 
 def _sum_of_squares(x):
@@ -37,12 +40,12 @@ def get_function(_function_type):
         return alpine_1
     elif _function_type == FunctionType.CIGAR:
         return cigar
-    elif _function_type == FunctionType.COSINE_MIXTURE:
-        return cosine_mixture
     elif _function_type == FunctionType.GRIEWANK:
         return griewank
     elif _function_type == FunctionType.SCHWEFEL:
         return schwefel
+    elif _function_type == FunctionType.ACKLEY:
+        return ackley
     else:
         raise AttributeError("Unknown function type", _function_type)
 
