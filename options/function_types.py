@@ -8,4 +8,4 @@ class FunctionType(Enum):
     CIGAR = "cigar"
     ACKLEY = "ackley"
     BIRD = "bird"
-    BRAIN_1 = "brain-1"
+    BRANIN_1 = "branin-1"

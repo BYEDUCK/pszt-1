@@ -6,24 +6,29 @@ from options.function_types import FunctionType
 
 # http://infinity77.net/global_optimization/test_functions_nd_A.html
 
+# min 0
 def griewank(x):
     part_1 = _sum_of_squares(x)
     part_2 = reduce(lambda a, b: a * b, map(lambda a: math.cos(a[1] / math.sqrt(a[0] + 1)), enumerate(x)))
     return 1 + part_1 / 4000 - part_2
 
 
+# min 0
 def schwefel(x):
     return 418.9829 * len(x) - sum(map(lambda a: a * math.sin(math.sqrt(abs(a))), x))
 
 
+# min 0
 def alpine_1(x):
     return sum(map(lambda a: abs(a * math.sin(a) + 0.1 * a), x))
 
 
+# min 0
 def cigar(x, c=1000000):
     return x[0] ** 2 + c * _sum_of_squares(x[1:])
 
 
+# min 0
 def ackley(x):
     n = len(x)
     part_1 = math.exp(-0.2 * math.sqrt(1 / n * _sum_of_squares(x)))
@@ -31,6 +36,7 @@ def ackley(x):
     return -20 * part_1 - part_2 + 20 + math.e
 
 
+# min -106.7645367198034
 def bird(x):
     # two dimensional only!
     if len(x) != 2:
@@ -41,7 +47,8 @@ def bird(x):
     return part_1 + part_2 + part_3
 
 
-def brain_1(x):
+# min 0.39788735772973816
+def branin_1(x):
     # two dimensional only!
     if len(x) != 2:
         raise ValueError("this function can only be 2d")
@@ -67,8 +74,8 @@ def get_function(_function_type):
         return ackley
     elif _function_type == FunctionType.BIRD:
         return bird
-    elif _function_type == FunctionType.BRAIN_1:
-        return brain_1
+    elif _function_type == FunctionType.BRANIN_1:
+        return branin_1
     else:
         raise AttributeError("Unknown function type", _function_type)
 
