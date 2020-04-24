@@ -37,7 +37,7 @@ def _average_results(in_data):
 
     averaged = []
     for i in range(len(pom)):
-        averaged.append(pom[i] / len(in_data[0]))
+        averaged.append(pom[i] / len(in_data))
 
     return averaged
 
