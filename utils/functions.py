@@ -6,6 +6,7 @@ from options.function_types import FunctionType
 
 # http://infinity77.net/global_optimization/test_functions_nd_A.html
 
+
 # min 0
 def griewank(x):
     part_1 = _sum_of_squares(x)

@@ -34,7 +34,9 @@ def make_groups(population, size_of_group, func):
     return group
 
 
+
 def get_random_population(length, dimension, x_min, x_max):
+
     subject = []
     for i in range(length):
         element = []

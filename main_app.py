@@ -26,6 +26,7 @@ if __name__ == "__main__":
     x_min = parsedOptions["x_min"]
     x_max = parsedOptions["x_max"]
 
+
     fun = get_function(function_type)
     select = get_selection(selection_type)
     replace = get_replacement(replacement_type)
