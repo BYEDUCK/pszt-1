@@ -23,6 +23,9 @@ if __name__ == "__main__":
     cardinality = parsedOptions["cardinality"]
     attempts = parsedOptions["attempts"]
     mut_range = parsedOptions["mut_sigma"]
+    x_min = parsedOptions["x_min"]
+    x_max = parsedOptions["x_max"]
+
 
     fun = get_function(function_type)
     select = get_selection(selection_type)
@@ -40,7 +43,7 @@ if __name__ == "__main__":
     start = time.time()
     for h in range(attempts):
         print("\t", math.floor(h / attempts * 100), "%", end='\r')
-        population = get_random_population(cardinality, dimensions)
+        population = get_random_population(cardinality, dimensions, x_min, x_max)
 
         # Loop
         pairs = make_pairs(population, fun)
